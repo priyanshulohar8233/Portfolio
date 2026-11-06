@@ -1,224 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
-import {
-  ArrowDownRight, ArrowUpRight, ArrowRight, Github, Linkedin, Mail,
-  Phone, Menu, X, Sparkles, BrainCircuit, Workflow, Code2, ExternalLink,
-  ChevronDown, Terminal, Layers3, Bot, MonitorSmartphone, Send, MapPin
-} from "lucide-react";
+import { BrowserRouter, Link, NavLink, Route, Routes, useParams } from "react-router-dom";
+import { ArrowRight, ArrowUpRight, Github, Linkedin, Mail, MapPin, Phone, Code2, Layers3, BrainCircuit, Terminal, ExternalLink } from "lucide-react";
 import "./styles.css";
 
 const projects = [
-  {
-    id: "01",
-    category: "AGENTIC AI · SOCIAL MEDIA",
-    title: "Social Media Growth AI",
-    subtitle: "An agentic system for multi-client social media workflows.",
-    description: "A multi-client dashboard designed to bring social media planning, AI-assisted content drafting and client activity monitoring into one workflow.",
-    challenge: "Managing social media work across multiple clients can fragment planning, drafting and performance visibility across separate tools.",
-    approach: [
-      "Built a multi-client dashboard for social media planning, content drafting and client activity monitoring.",
-      "Developed Python and LangGraph agentic workflows for LLM-assisted content planning and generation.",
-      "Added a human-in-the-loop review and approval step before content is published.",
-      "Included client-wise growth tracking and workflow visibility for performance monitoring."
-    ],
-    stack: ["Python", "LangGraph", "LLMs", "React.js", "API Integration"],
-    outcome: "A unified workflow concept that combines AI-assisted planning with human review and client-level visibility.",
-    link: "https://brain-growth-dashboard.vercel.app/",
-    linkLabel: "Open live demo",
-    number: "01",
-    visual: "orbit"
-  },
-  {
-    id: "02",
-    category: "CONVERSATIONAL AI · HOSPITALITY",
-    title: "Restaurant / Cafe AI Assistant",
-    subtitle: "Conversational booking support for hospitality businesses.",
-    description: "A conversational AI assistant designed to handle natural-language restaurant and cafe reservation requests through customer-facing and admin workflows.",
-    challenge: "Reservation requests need to be captured clearly while giving customers a natural way to explain what they need.",
-    approach: [
-      "Developed a conversational AI assistant for natural-language restaurant and cafe reservation requests.",
-      "Implemented customer-facing booking conversations and reservation-request capture.",
-      "Created admin workflows to review and manage booking conversations and requests."
-    ],
-    stack: ["Conversational AI", "LLM Integration", "API Integration"],
-    outcome: "A customer-facing conversational flow paired with admin-side review and request management.",
-    link: "https://frontend-nu-seven-99.vercel.app/",
-    linkLabel: "Open live demo",
-    number: "02",
-    visual: "chat"
-  },
-  {
-    id: "03",
-    category: "FULL-STACK · AUTOMATION",
-    title: "Email Automation System",
-    subtitle: "A full-stack workflow for scheduled outreach and follow-ups.",
-    description: "A web application built to organize email outreach, recurring message scheduling and follow-up workflows with SMTP-based delivery.",
-    challenge: "Outreach sequences require consistent scheduling and follow-up management rather than disconnected, manually triggered messages.",
-    approach: [
-      "Built a full-stack email outreach system with recurring scheduling and automated follow-ups.",
-      "Integrated SMTP delivery for sending email messages.",
-      "Created a centralized workflow for managing email outreach activities."
-    ],
-    stack: ["React.js", "Node.js", "MongoDB", "SMTP"],
-    outcome: "A centralized email outreach workflow with recurring scheduling and follow-up support.",
-    link: "https://email-automation-system-phi.vercel.app/",
-    linkLabel: "Open live demo",
-    number: "03",
-    visual: "mail"
-  },
-  {
-    id: "04",
-    category: "PRODUCT DESIGN · ENTERPRISE SAAS",
-    title: "Customer Care Portal",
-    subtitle: "A unified enterprise dashboard experience for customer operations.",
-    description: "A UI/UX design concept for user and admin experiences spanning enquiries, CRM, fulfilment, logistics and after-sales support workflows.",
-    challenge: "Customer operations can span several connected functions, making it important to give users and administrators a clear place to manage each workflow.",
-    approach: [
-      "Designed user and admin dashboards for customer enquiries and lead management (CRM).",
-      "Designed order fulfilment and logistics tracking interfaces.",
-      "Incorporated complaint management and warranty / claims workflows."
-    ],
-    stack: ["UI/UX Design", "Enterprise Dashboard", "CRM Workflows"],
-    outcome: "A connected dashboard experience covering key customer-care and order-support touchpoints.",
-    link: "",
-    linkLabel: "",
-    number: "04",
-    visual: "dashboard"
-  }
+  { id:"social-media-growth-ai", number:"01", category:"AI PRODUCT · SOCIAL MEDIA", title:"Social Media Growth AI", subtitle:"A focused workspace for planning and reviewing content across multiple clients.", description:"A multi client dashboard that brings content planning, AI assisted drafting and client activity into one practical workflow.", challenge:"Social media work across several clients often spreads planning, drafts and progress tracking across disconnected tools. Teams need a clear shared view and a review step before content goes live.", approach:["Designed a multi client dashboard for planning, content drafts and activity monitoring.","Built Python and LangGraph workflows to support content research and generation.","Added a human review step so suggested content can be refined before publishing.","Organized client level progress and growth signals in one workspace."], stack:["Python","LangGraph","LLM APIs","React","REST APIs"], outcome:"A single workflow concept connecting planning, AI assisted drafting and human review, with client level visibility.", link:"https://brain-growth-dashboard.vercel.app/", visual:"social" },
+  { id:"restaurant-cafe-assistant", number:"02", category:"CONVERSATIONAL PRODUCT · HOSPITALITY", title:"Restaurant and Cafe Assistant", subtitle:"A natural booking conversation with a clear path for staff review.", description:"A conversational reservation experience that helps guests explain their request and gives administrators a place to review it.", challenge:"Booking forms can make it hard to express timing and seating needs. Staff also need a reliable way to review and manage incoming requests.", approach:["Created a customer facing conversation for natural language reservation requests.","Structured booking details so the request can be reviewed clearly.","Designed an admin workflow for reviewing and managing reservations."], stack:["Conversational AI","LLM integration","API integration","React"], outcome:"A clear guest conversation paired with an administrative review flow.", link:"https://frontend-nu-seven-99.vercel.app/", visual:"chat" },
+  { id:"email-automation-system", number:"03", category:"FULL STACK · AUTOMATION", title:"Email Automation System", subtitle:"Scheduled outreach and follow ups managed in one place.", description:"A web application for organizing email outreach, recurring messages and follow up sequences with SMTP delivery.", challenge:"Outreach sequences need consistent timing and follow up. When scheduling and delivery are handled in separate places, it becomes difficult to keep track of what is due.", approach:["Built a full stack system for email outreach and recurring schedules.","Integrated SMTP delivery for outgoing messages.","Added a centralized workflow for managing outreach and follow ups."], stack:["React","Node.js","MongoDB","SMTP"], outcome:"A centralized email workflow with recurring scheduling and follow up support.", link:"https://email-automation-system-phi.vercel.app/", visual:"mail" },
+  { id:"customer-care-portal", number:"04", category:"PRODUCT DESIGN · ENTERPRISE", title:"Customer Care Portal", subtitle:"Connected views for customer operations and after sales support.", description:"A product design concept for customer and admin experiences across enquiries, CRM, fulfilment, logistics and after sales support.", challenge:"Customer operations move between enquiries, orders, logistics and claims. Teams need a consistent way to understand the current request and its next step.", approach:["Designed customer and admin dashboards for enquiries and lead management.","Mapped order fulfilment and logistics tracking into the wider support experience.","Included complaint, warranty and claims workflows."], stack:["Product design","UI and UX","CRM workflows","Enterprise dashboards"], outcome:"A connected dashboard concept covering key customer care and order support touchpoints.", link:"", visual:"dashboard" }
 ];
-
-const skillGroups = [
-  { title: "Generative AI & Automation", icon: BrainCircuit, items: ["Generative AI", "LLMs", "Prompt Engineering", "LangGraph", "LangChain", "Conversational AI", "AI Automation", "Human-in-the-Loop", "OpenAI / Anthropic API"] },
-  { title: "Programming", icon: Code2, items: ["Python", "JavaScript", "PHP", "C++"] },
-  { title: "Full-Stack Development", icon: Layers3, items: ["React.js", "Node.js", "REST APIs", "MongoDB", "MySQL", "SMTP", "HTML", "CSS", "WordPress"] },
-  { title: "Tools", icon: Terminal, items: ["Git / GitHub", "Playwright", "Puppeteer", "OpenCV", "FFmpeg", "VS Code"] }
+const skillGroups=[
+  {title:"AI and automation",icon:BrainCircuit,items:["Generative AI","LLMs","Prompt engineering","LangGraph","LangChain","Conversational AI","Human review","OpenAI and Anthropic APIs"]},
+  {title:"Programming",icon:Code2,items:["Python","JavaScript","PHP","C++"]},
+  {title:"Full stack development",icon:Layers3,items:["React","Node.js","REST APIs","MongoDB","MySQL","SMTP","HTML","CSS","WordPress"]},
+  {title:"Tools",icon:Terminal,items:["Git and GitHub","Playwright","Puppeteer","OpenCV","FFmpeg","VS Code"]}
 ];
-
-function ProjectVisual({ type }) {
-  if (type === "orbit") return <div className="visual visual-orbit"><div className="orbit-ring r1"/><div className="orbit-ring r2"/><div className="orbit-core"><BrainCircuit size={34}/></div><span className="orbit-node n1">PLAN</span><span className="orbit-node n2">DRAFT</span><span className="orbit-node n3">REVIEW</span><span className="orbit-node n4">GROW</span></div>;
-  if (type === "chat") return <div className="visual visual-chat"><div className="chat-window"><div className="chat-top"><i/><i/><i/><span>booking-assistant</span></div><div className="bubble bot">Welcome! How can I help with your reservation?</div><div className="bubble user">A table for two this evening, please.</div><div className="bubble bot short">Of course — let's capture your request.</div><div className="chat-input">Type a message… <Send size={13}/></div></div></div>;
-  if (type === "mail") return <div className="visual visual-mail"><div className="mail-card"><div className="mail-icon"><Mail size={27}/></div><div className="mail-line wide"/><div className="mail-line"/><div className="mail-line small"/><div className="mail-schedule"><span className="pulse"/> RECURRING SEQUENCE <ArrowRight size={14}/></div></div><div className="mail-stamp">AUTO<br/>FOLLOW-UP</div></div>;
-  return <div className="visual visual-dashboard"><div className="dash-side"><b>CC.</b><span/><span/><span/><span/></div><div className="dash-main"><div className="dash-head">Customer overview</div><div className="dash-metrics"><i/><i/><i/></div><div className="dash-chart"><span/><span/><span/><span/><span/><span/><span/><span/></div><div className="dash-rows"><i/><i/><i/></div></div></div>;
-}
-
-function App() {
-  const [activeProject, setActiveProject] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
-
-  const closeMenu = () => setMenuOpen(false);
-  const copyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText("priyanshulohar18@gmail.com");
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      window.location.href = "mailto:priyanshulohar18@gmail.com";
-    }
-  };
-
-  return <div className="site-shell">
-    <div className="noise"/>
-    <header className="nav-wrap">
-      <a className="brand" href="#home" onClick={closeMenu}><span className="brand-mark">PL</span><span>PRIYANSHU LOHAR<span className="brand-sub">AI APPLICATION DEVELOPER</span></span></a>
-      <button className="mobile-menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X/> : <Menu/>}</button>
-      <nav className={menuOpen ? "nav-links open" : "nav-links"}>
-        <a href="#work" onClick={closeMenu}>Work <span>01</span></a>
-        <a href="#about" onClick={closeMenu}>About <span>02</span></a>
-        <a href="#skills" onClick={closeMenu}>Skills <span>03</span></a>
-        <a href="#experience" onClick={closeMenu}>Experience <span>04</span></a>
-        <a className="nav-contact" href="#contact" onClick={closeMenu}>Let's talk <ArrowUpRight size={15}/></a>
-      </nav>
-    </header>
-
-    <main id="home">
-      <section className="hero section-pad">
-        <div className="hero-grid"/>
-        <div className="hero-copy">
-          <div className="eyebrow"><span className="status-dot"/> AVAILABLE FOR REMOTE OPPORTUNITIES <span className="eyebrow-line"/></div>
-          <h1>Building intelligent<br/><em>digital experiences.</em></h1>
-          <p className="hero-lead">I’m Priyanshu — an AI Application Developer exploring the space where <strong>Generative AI, automation and full-stack engineering</strong> come together.</p>
-          <div className="hero-actions"><a className="button button-primary" href="#work">Explore my work <ArrowDownRight size={17}/></a><a className="text-link" href="mailto:priyanshulohar18@gmail.com">Get in touch <ArrowUpRight size={16}/></a></div>
-          <div className="hero-meta"><span><MapPin size={14}/> Ahmedabad / Rajasthan, India</span><span className="meta-sep"/> <span>REMOTE · INDIA</span></div>
-        </div>
-        <div className="hero-art" aria-label="Abstract AI workflow illustration">
-          <div className="art-label label-top">SYSTEMS / 001</div>
-          <div className="art-grid"/>
-          <div className="art-orbit orbit-a"/><div className="art-orbit orbit-b"/><div className="art-orbit orbit-c"/>
-          <div className="art-center"><Sparkles size={35}/><span>IDEAS → SYSTEMS</span></div>
-          <div className="art-node node-a"><BrainCircuit size={17}/><span>LLM</span></div>
-          <div className="art-node node-b"><Workflow size={17}/><span>AGENTS</span></div>
-          <div className="art-node node-c"><Code2 size={17}/><span>BUILD</span></div>
-          <div className="art-label label-bottom">THINK · BUILD · ITERATE</div>
-          <div className="art-cross cross-a">+</div><div className="art-cross cross-b">+</div>
-        </div>
-        <div className="hero-bottom"><span>SCROLL TO EXPLORE</span><div className="scroll-line"/></div>
-      </section>
-
-      <section className="ticker" aria-label="Areas of focus"><div className="ticker-track">{["GENERATIVE AI","AGENTIC WORKFLOWS","FULL-STACK DEVELOPMENT","AI AUTOMATION","PRODUCT THINKING","GENERATIVE AI","AGENTIC WORKFLOWS","FULL-STACK DEVELOPMENT"].map((x,i)=><span key={i}>{x}<b>✳</b></span>)}</div></section>
-
-      <section className="work-section section-pad" id="work">
-        <div className="section-heading"><div><div className="eyebrow">01 / SELECTED WORK</div><h2>Projects with a<br/><em>purpose.</em></h2></div><p>A closer look at the products, workflows and interfaces I’ve been building — from agentic AI to full-stack automation.</p></div>
-        <div className="project-list">
-          {projects.map((p) => <article className="project-card" key={p.id}>
-            <button className="project-open" onClick={() => setActiveProject(p)} aria-label={`View ${p.title} details`}>
-              <div className="project-visual-wrap"><ProjectVisual type={p.visual}/><span className="project-index">{p.number} / 04</span></div>
-              <div className="project-info"><div className="project-category">{p.category}</div><h3>{p.title}</h3><p>{p.subtitle}</p><div className="project-bottom"><span>{p.link ? "VIEW CASE STUDY" : "VIEW DESIGN CASE STUDY"} <ArrowUpRight size={15}/></span><span className="project-arrow"><ArrowUpRight size={19}/></span></div></div>
-            </button>
-          </article>)}
-        </div>
-      </section>
-
-      <section className="statement-section section-pad" aria-label="Design approach">
-        <p>Useful technology starts with a clear idea.<br/><em>Thoughtful systems make it real.</em></p>
-      </section>
-
-      <section className="about-section section-pad" id="about">
-        <div className="section-heading"><div><div className="eyebrow">02 / A LITTLE ABOUT ME</div><h2>Curious by nature.<br/><em>Builder by choice.</em></h2></div></div>
-        <div className="about-layout"><div className="about-statement"><span className="quote-mark">“</span><p>I enjoy turning complex ideas into practical digital experiences — especially when intelligent systems can make everyday workflows simpler.</p></div><div className="about-detail"><p>I’m a Computer Science graduate with experience across full-stack development, business operations and hands-on projects in Generative AI and workflow automation.</p><p>My work brings together Python, LangGraph, LLM integrations and web technologies. I’m interested in building useful AI-powered applications with thoughtful user experiences and clear human oversight.</p><div className="about-tags"><span>AI APPLICATIONS</span><span>WORKFLOW DESIGN</span><span>FULL-STACK</span></div></div></div>
-      </section>
-
-      <section className="skills-section section-pad" id="skills">
-        <div className="section-heading"><div><div className="eyebrow">03 / TOOLKIT</div><h2>Tools of the<br/><em>trade.</em></h2></div><p>A practical toolkit for prototyping, integrating and shipping digital products.</p></div>
-        <div className="skills-grid">{skillGroups.map((group) => { const Icon = group.icon; return <div className="skill-card" key={group.title}><div className="skill-card-head"><Icon size={20}/><span>CAPABILITY</span></div><h3>{group.title}</h3><div className="skill-tags">{group.items.map(item=><span key={item}>{item}</span>)}</div></div>})}</div>
-      </section>
-
-      <section className="experience-section section-pad" id="experience">
-        <div className="section-heading"><div><div className="eyebrow">04 / EXPERIENCE</div><h2>Where I’ve<br/><em>contributed.</em></h2></div><p>Professional experience spanning AI initiatives, digital operations and web application development.</p></div>
-        <div className="timeline">
-          <div className="timeline-item"><div className="timeline-date">JAN 2026 — PRESENT</div><div className="timeline-main"><h3>Junior Digital Marketing Associate</h3><div className="timeline-company">MP Consulting, LLC · Ahmedabad · On-site</div><ul><li>Contribute to AI application and workflow automation using Python, LLMs and API integrations.</li><li>Support B2B lead generation and digital marketing; prepare prospect databases and verified contact lists.</li><li>Manage social media and marketing activities; maintain daily PLM data updates.</li></ul></div></div>
-          <div className="timeline-item"><div className="timeline-date">SEP 2025 — DEC 2025</div><div className="timeline-main"><h3>Full Stack Developer Intern</h3><div className="timeline-company">AppOrigo Technologies · Remote</div><ul><li>Contributed to web application development, including responsive interfaces, backend logic, API integration and databases.</li><li>Collaborated with teammates to debug issues, improve functionality and use version control.</li></ul></div></div>
-          <div className="timeline-item"><div className="timeline-date">JAN 2023 — DEC 2024</div><div className="timeline-main"><h3>Web Development & Customer Engagement</h3><div className="timeline-company">Alankar Die Cast Private Limited</div><ul><li>Designed and developed responsive website UI/UX and supported customer engagement.</li><li>Supported workflow improvements across web, product design and 3D/CAD-CAM tasks.</li></ul></div></div>
-        </div>
-      </section>
-
-      <section className="contact-section section-pad" id="contact">
-        <div className="contact-glow"/>
-        <div className="eyebrow">05 / HAVE A PROJECT IN MIND?</div>
-        <h2>Let’s build something<br/><em>meaningful.</em></h2>
-        <p>Open to opportunities in AI application development, Generative AI and automation.</p>
-        <div className="contact-actions"><a className="button button-primary" href="mailto:priyanshulohar18@gmail.com">Start a conversation <ArrowUpRight size={17}/></a><button className="button button-outline" onClick={copyEmail}><Mail size={16}/>{copied ? "Email copied" : "Copy email"}</button></div>
-        <div className="contact-details"><a href="mailto:priyanshulohar18@gmail.com"><Mail size={15}/> priyanshulohar18@gmail.com</a><a href="tel:+919672158903"><Phone size={15}/> +91 9672158903</a></div>
-      </section>
-    </main>
-
-    <footer className="footer"><a className="brand" href="#home"><span className="brand-mark">PL</span><span>PRIYANSHU LOHAR<span className="brand-sub">AI APPLICATION DEVELOPER</span></span></a><span className="footer-note">DESIGNED & BUILT WITH INTENTION · 2026</span><div className="socials"><a href="https://github.com/priyanshulohar8233" target="_blank" rel="noreferrer" aria-label="GitHub"><Github size={17}/></a><a href="https://www.linkedin.com/in/priyanshu-lohar-82b7201a7" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin size={17}/></a><a href="mailto:priyanshulohar18@gmail.com" aria-label="Email"><Mail size={17}/></a></div></footer>
-
-    {activeProject && <div className="modal-backdrop" role="presentation" onMouseDown={(e)=>{if(e.target===e.currentTarget)setActiveProject(null);}}>
-      <section className="case-modal" role="dialog" aria-modal="true" aria-labelledby="case-title">
-        <button className="modal-close" onClick={()=>setActiveProject(null)} aria-label="Close project details"><X/></button>
-        <div className="modal-kicker">CASE STUDY / {activeProject.id} <span>{activeProject.category}</span></div>
-        <div className="modal-visual"><ProjectVisual type={activeProject.visual}/></div>
-        <h2 id="case-title">{activeProject.title}</h2><p className="modal-subtitle">{activeProject.description}</p>
-        <div className="case-block"><div className="case-label">THE CHALLENGE</div><p>{activeProject.challenge}</p></div>
-        <div className="case-block"><div className="case-label">WHAT I BUILT</div><ul>{activeProject.approach.map((line,i)=><li key={i}>{line}</li>)}</ul></div>
-        <div className="case-block"><div className="case-label">OUTCOME</div><p>{activeProject.outcome}</p></div>
-        <div className="case-block"><div className="case-label">TECH / FOCUS</div><div className="modal-tags">{activeProject.stack.map(s=><span key={s}>{s}</span>)}</div></div>
-        {activeProject.link && <a className="button button-primary modal-link" href={activeProject.link} target="_blank" rel="noreferrer">{activeProject.linkLabel} <ExternalLink size={16}/></a>}
-        {!activeProject.link && <div className="modal-note">Design project · No public demo link listed</div>}
-      </section>
-    </div>}
-  </div>;
-}
-
+function Header(){return <header className="header"><Link className="brand" to="/"><span className="brand-monogram">PL</span><span>Priyanshu Lohar<small>AI application developer</small></span></Link><nav>{[["Home","/"],["About","/about"],["Work","/work"],["Skills","/skills"],["Experience","/experience"],["Contact","/contact"]].map(([n,p])=><NavLink end={p==="/"} key={p} to={p}>{n}</NavLink>)}</nav><Link className="header-cta" to="/contact">Let’s talk <ArrowUpRight size={15}/></Link></header>}
+function Footer(){return <footer className="footer"><span>© 2026 Priyanshu Lohar</span><div><a href="https://github.com/priyanshulohar8233" aria-label="GitHub"><Github size={18}/></a><a href="https://www.linkedin.com/in/priyanshu-lohar-82b7201a7" aria-label="LinkedIn"><Linkedin size={18}/></a><a href="mailto:priyanshulohar18@gmail.com" aria-label="Email"><Mail size={18}/></a></div><span>Designed with care</span></footer>}
+function Page({eyebrow,title,children}){return <main className="page"><div className="page-heading"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1></div>{children}</main>}
+function Home(){return <main><section className="hero"><div className="hero-copy"><span className="eyebrow"><i/> AI application developer · India</span><h1>Thoughtful software<br/>for <span>everyday work.</span></h1><p>I’m Priyanshu, a developer working across AI applications, workflow automation and full stack products. I like making complex ideas clear and useful.</p><div className="hero-actions"><Link className="button primary" to="/work">Explore my work <ArrowRight size={17}/></Link><Link className="button secondary" to="/about">More about me</Link></div><div className="hero-location"><MapPin size={15}/> Ahmedabad / Rajasthan, India <span>·</span> Open to remote opportunities</div></div><div className="portrait-wrap"><div className="portrait-frame"><img src="/priyanshu-lohar.jpg" alt="Priyanshu Lohar wearing a navy suit"/></div><div className="portrait-caption"><span>Priyanshu Lohar</span><span>Building useful digital products</span></div><div className="portrait-accent"/></div></section><section className="home-work"><div className="section-top"><div><span className="eyebrow">SELECTED WORK</span><h2>A few things I’ve built.</h2></div><Link className="arrow-link" to="/work">All projects <ArrowRight size={16}/></Link></div><ProjectGrid items={projects.slice(0,3)}/></section><section className="home-note"><span className="eyebrow">HOW I WORK</span><p>Clear problems. Considered details.<br/><span>Software people can actually use.</span></p><Link className="arrow-link" to="/about">Get to know me <ArrowRight size={16}/></Link></section></main>}
+function About(){return <Page eyebrow="ABOUT" title="A little about me."><div className="prose"><p className="lead">I enjoy turning complex ideas into practical digital experiences, especially when intelligent systems can make everyday work simpler.</p><p>I’m a Computer Science graduate with experience across full stack development, business operations and hands on projects in Generative AI and workflow automation.</p><p>My work brings together Python, LangGraph, LLM integrations and web technologies. I’m interested in useful AI powered applications with thoughtful user experiences and clear human oversight.</p><div className="about-facts"><div><span>FOCUS</span><strong>AI applications and product development</strong></div><div><span>BASED IN</span><strong>India · Open to remote work</strong></div><div><span>APPROACH</span><strong>Practical, collaborative and curious</strong></div></div><Link className="button primary" to="/contact">Get in touch <ArrowRight size={17}/></Link></div></Page>}
+function ProjectVisual({type}){return <div className={`project-art art-${type}`} aria-hidden="true"><div className="art-window"><span/><span/><span/><b>{type==="chat"?"reservation request":type==="mail"?"campaign overview":type==="dashboard"?"customer overview":"content planner"}</b><div className="art-content"><i/><i/><i/><i/></div></div></div>}
+function ProjectGrid({items=projects}){return <div className="project-grid">{items.map(p=><Link className="project-card" key={p.id} to={`/work/${p.id}`}><ProjectVisual type={p.visual}/><div className="project-meta"><span>{p.number} · {p.category}</span><ArrowUpRight size={17}/></div><h3>{p.title}</h3><p>{p.subtitle}</p><span className="card-more">View project overview <ArrowRight size={15}/></span></Link>)}</div>}
+function Work(){return <Page eyebrow="PORTFOLIO" title="Selected projects."><p className="page-intro">A closer look at the products, workflows and interfaces I’ve worked on. Open any project for its full overview.</p><ProjectGrid/></Page>}
+function ProjectDetail(){const {slug}=useParams();const project=projects.find(p=>p.id===slug);if(!project)return <Page eyebrow="PROJECT" title="Project not found."><Link className="arrow-link" to="/work">Back to all projects <ArrowRight size={16}/></Link></Page>;return <main className="detail-page"><Link className="back-link" to="/work">← All projects</Link><div className="detail-heading"><span className="eyebrow">{project.number} / {project.category}</span><h1>{project.title}</h1><p>{project.subtitle}</p></div><div className="detail-visual"><ProjectVisual type={project.visual}/></div><div className="detail-layout"><article className="detail-copy"><section><span className="eyebrow">OVERVIEW</span><p className="lead">{project.description}</p></section><section><span className="eyebrow">THE CHALLENGE</span><p>{project.challenge}</p></section><section><span className="eyebrow">APPROACH</span><ul>{project.approach.map(a=><li key={a}>{a}</li>)}</ul></section><section><span className="eyebrow">OUTCOME</span><p>{project.outcome}</p></section><section><span className="eyebrow">TOOLS AND FOCUS</span><div className="chips">{project.stack.map(t=><span key={t}>{t}</span>)}</div></section>{project.link&&<a className="button primary" href={project.link} target="_blank" rel="noreferrer">Open live project <ExternalLink size={16}/></a>}</article><aside className="detail-aside"><span>PROJECT DETAILS</span><div><small>TYPE</small><b>{project.category}</b></div><div><small>ROLE</small><b>Product development and implementation</b></div><div><small>STACK</small><b>{project.stack.slice(0,3).join(", ")}</b></div></aside></div><div className="next-project"><span className="eyebrow">MORE WORK</span><ProjectGrid items={projects.filter(p=>p.id!==project.id).slice(0,2)}/></div></main>}
+function Skills(){return <Page eyebrow="TOOLKIT" title="Tools I work with."><p className="page-intro">A practical toolkit for prototyping, integrating and shipping digital products.</p><div className="skills-grid">{skillGroups.map(({title,icon:Icon,items})=><section className="skill-card" key={title}><Icon size={21}/><h2>{title}</h2><div className="chips">{items.map(i=><span key={i}>{i}</span>)}</div></section>)}</div></Page>}
+function Experience(){return <Page eyebrow="EXPERIENCE" title="Where I’ve contributed."><p className="page-intro">Professional experience spanning AI initiatives, digital operations and web application development.</p><div className="timeline"><article><span>JAN 2026 — PRESENT</span><div><h2>Junior Digital Marketing Associate</h2><b>MP Consulting, LLC · Ahmedabad · On site</b><ul><li>Contribute to AI application and workflow automation using Python, LLMs and API integrations.</li><li>Support B2B lead generation and prepare prospect databases and verified contact lists.</li><li>Manage social media and marketing activities, including daily PLM data updates.</li></ul></div></article><article><span>SEP 2025 — DEC 2025</span><div><h2>Full Stack Developer Intern</h2><b>AppOrigo Technologies · Remote</b><ul><li>Contributed to responsive web application interfaces, backend logic, APIs and databases.</li><li>Collaborated with teammates to debug issues and improve functionality.</li></ul></div></article><article><span>JAN 2023 — DEC 2024</span><div><h2>Web Development and Customer Engagement</h2><b>Alankar Die Cast Private Limited</b><ul><li>Designed responsive website UI and supported customer engagement.</li><li>Supported workflow improvements across web, product design and 3D/CAD CAM tasks.</li></ul></div></article></div></Page>}
+function Contact(){return <Page eyebrow="CONTACT" title="Let’s build something useful."><div className="contact-layout"><div><p className="lead">Have a project in mind or an opportunity to discuss? I’d be glad to hear from you.</p><a className="button primary" href="mailto:priyanshulohar18@gmail.com">Email Priyanshu <ArrowUpRight size={17}/></a></div><div className="contact-list"><a href="mailto:priyanshulohar18@gmail.com"><Mail/>priyanshulohar18@gmail.com</a><a href="tel:+919672158903"><Phone/>+91 9672158903</a><a href="https://www.linkedin.com/in/priyanshu-lohar-82b7201a7"><Linkedin/>LinkedIn profile</a><a href="https://github.com/priyanshulohar8233"><Github/>GitHub profile</a></div></div></Page>}
+function App(){return <BrowserRouter><div className="site"><a className="skip-link" href="#content">Skip to content</a><Header/><div id="content"><Routes><Route path="/" element={<Home/>}/><Route path="/about" element={<About/>}/><Route path="/work" element={<Work/>}/><Route path="/work/:slug" element={<ProjectDetail/>}/><Route path="/skills" element={<Skills/>}/><Route path="/experience" element={<Experience/>}/><Route path="/contact" element={<Contact/>}/><Route path="*" element={<Page eyebrow="404" title="Page not found."><Link className="arrow-link" to="/">Back home <ArrowRight size={16}/></Link></Page>}/></Routes></div><Footer/></div></BrowserRouter>}
 createRoot(document.getElementById("root")).render(<App/>);
